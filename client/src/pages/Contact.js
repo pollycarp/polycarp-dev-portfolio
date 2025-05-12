@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [touched, setTouched] = useState({});
-  const [status, setStatus] = useState('');
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'info' });
+  const toastRef = useRef(null);
 
   const isValidEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -24,31 +25,33 @@ const Contact = () => {
     return formData[name].trim() === '';
   };
 
+  const showToast = (message, variant = 'info') => {
+    setToast({ show: true, message, variant });
+    setTimeout(() => setToast({ ...toast, show: false }), 4000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Trigger all fields as touched
     setTouched({ name: true, email: true, message: true });
 
-    // Prevent submission if any field is invalid
     if (
       !formData.name.trim() ||
       !isValidEmail(formData.email) ||
       !formData.message.trim()
     ) {
-      setStatus('Please fill out all fields correctly.');
+      showToast('Please fill out all fields correctly.', 'danger');
       return;
     }
 
-    setStatus('Sending...');
     try {
       await axios.post('http://localhost:5000/api/contact', formData);
-      setStatus('Message sent successfully!');
+      showToast('Message sent successfully!', 'success');
       setFormData({ name: '', email: '', message: '' });
       setTouched({});
     } catch (err) {
       console.error(err);
-      setStatus('Something went wrong. Please try again.');
+      showToast('Something went wrong. Please try again.', 'danger');
     }
   };
 
@@ -60,9 +63,10 @@ const Contact = () => {
       transition={{ duration: 0.5 }}
       className="container mt-5"
     >
-      <div className="card shadow p-4">
+      <div className="card shadow p-4 position-relative">
         <h2 className="mb-4">Contact Me</h2>
         <form onSubmit={handleSubmit} noValidate>
+          {/* Name Field */}
           <div className="mb-3">
             <label className="form-label">Your Name</label>
             <input
@@ -73,10 +77,10 @@ const Contact = () => {
               onBlur={handleBlur}
               className={`form-control ${isFieldInvalid('name') ? 'is-invalid' : ''}`}
             />
-            {isFieldInvalid('name') && (
-              <div className="invalid-feedback">Name is required.</div>
-            )}
+            {isFieldInvalid('name') && <div className="invalid-feedback">Name is required.</div>}
           </div>
+
+          {/* Email Field */}
           <div className="mb-3">
             <label className="form-label">Your Email</label>
             <input
@@ -91,6 +95,8 @@ const Contact = () => {
               <div className="invalid-feedback">Enter a valid email address.</div>
             )}
           </div>
+
+          {/* Message Field */}
           <div className="mb-3">
             <label className="form-label">Your Message</label>
             <textarea
@@ -105,9 +111,27 @@ const Contact = () => {
               <div className="invalid-feedback">Message cannot be empty.</div>
             )}
           </div>
+
           <button type="submit" className="btn btn-primary">Send</button>
         </form>
-        {status && <div className="mt-3 text-info">{status}</div>}
+
+        {/* Toast Notification */}
+        {toast.show && (
+          <div
+            ref={toastRef}
+            className={`toast align-items-center text-white bg-${toast.variant} border-0 position-absolute top-0 end-0 m-3 show`}
+            role="alert"
+          >
+            <div className="d-flex">
+              <div className="toast-body">{toast.message}</div>
+              <button
+                type="button"
+                className="btn-close btn-close-white me-2 m-auto"
+                onClick={() => setToast({ ...toast, show: false })}
+              ></button>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
