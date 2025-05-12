@@ -75,10 +75,20 @@ const Home = ({ loading }) => {
           </motion.span>
         </p>
 
-        <div className="d-flex justify-content-center gap-3">
+        <div className="d-flex justify-content-center gap-3 flex-wrap mt-3">
           <a href="/projects" className="btn btn-outline-light">View Projects</a>
           <a href="/contact" className="btn btn-info text-white">Contact Me</a>
+          <a
+            href="/Polycarp_Resume.pdf"
+            className="btn btn-outline-warning"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download Resume
+          </a>
         </div>
+
       </div>
     </motion.section>
   );
