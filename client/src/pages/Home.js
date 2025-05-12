@@ -4,16 +4,14 @@ import { motion } from 'framer-motion';
 const Home = () => {
   return (
     <motion.div
-      className="hero"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
-      style={{ padding: '2rem', textAlign: 'center' }}
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.5 }}
+      style={{ padding: '2rem' }}
     >
-      <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Hello, I'm Polycarp 👨🏽‍💻</h1>
-      <p style={{ fontSize: '1.25rem', color: '#555' }}>
-        A full-stack developer building modern, interactive web applications.
-      </p>
+      <h1 style={{ fontSize: '3rem' }}>Hello, I'm Polycarp 👨🏽‍💻</h1>
+      <p>A full-stack developer building interactive web applications.</p>
     </motion.div>
   );
 };

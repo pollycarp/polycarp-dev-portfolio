@@ -15,14 +15,20 @@ const Projects = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.5 }}
       style={{ padding: '2rem' }}
     >
       <h2 style={{ marginBottom: '1rem' }}>Projects</h2>
 
-      <motion.div style={{ marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap' }}>
+      <motion.div
+        style={{ marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+      >
         {techStacks.map((stack) => (
           <motion.button
             key={stack}
@@ -48,7 +54,7 @@ const Projects = () => {
         layout
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
