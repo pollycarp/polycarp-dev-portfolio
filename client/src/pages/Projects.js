@@ -6,7 +6,19 @@ import ProjectCard from '../components/ProjectCard';
 const Projects = () => {
   const [filter, setFilter] = useState("All");
   const [projects, setProjects] = useState([]);
+  const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // ✅ Define pinned repositories by name (GitHub repo names)
+    const pinnedRepoNames = [
+      "flask-file-share",
+      "polycarp-dev-portfolio",
+      "rust",
+      "hms",
+      "PrivacyLLM",
+      "tracker-for-covid19"
+    ];
+
 
   const techStacks = ["All", "React", "Flask", "Python", "API"];
 
@@ -16,7 +28,7 @@ const Projects = () => {
         const res = await axios.get("https://api.github.com/users/pollycarp/repos?sort=updated");
         setProjects(res.data);
       } catch (err) {
-        console.error("Error fetching repos:", err);
+        console.error("GitHub API error:", err);
       } finally {
         setLoading(false);
       }
@@ -25,12 +37,16 @@ const Projects = () => {
     fetchRepos();
   }, []);
 
-  const filteredProjects =
+  // Split pinned and extra projects
+  const pinnedProjects = projects.filter((repo) => pinnedRepoNames.includes(repo.name));
+  const extraProjects = projects.filter((repo) => !pinnedRepoNames.includes(repo.name));
+
+  const applyFilter = (repos) =>
     filter === "All"
-      ? projects
-      : projects.filter((project) =>
-          project.topics?.includes(filter.toLowerCase()) || // if using GitHub topics
-          (project.language && project.language.toLowerCase() === filter.toLowerCase())
+      ? repos
+      : repos.filter((repo) =>
+          repo.topics?.includes(filter.toLowerCase()) ||
+          (repo.language && repo.language.toLowerCase() === filter.toLowerCase())
         );
 
   return (
@@ -43,7 +59,7 @@ const Projects = () => {
     >
       <h2 style={{ marginBottom: '1rem' }}>Projects</h2>
 
-      {/* Filters */}
+      {/* Filter Buttons */}
       <motion.div
         style={{ marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap' }}
         initial={{ opacity: 0 }}
@@ -71,7 +87,7 @@ const Projects = () => {
         ))}
       </motion.div>
 
-      {/* Project Cards */}
+      {/* Project Cards Grid */}
       <motion.div
         layout
         initial={{ opacity: 0 }}
@@ -85,22 +101,55 @@ const Projects = () => {
       >
         {loading ? (
           <p>Loading projects...</p>
-        ) : filteredProjects.length === 0 ? (
-          <p>No projects match this filter.</p>
         ) : (
-          filteredProjects.map((repo) => (
-            <ProjectCard
-              key={repo.id}
-              project={{
-                title: repo.name,
-                description: repo.description,
-                tech: [repo.language],
-                link: repo.html_url
-              }}
-            />
-          ))
+          <>
+            {applyFilter(pinnedProjects).map((repo) => (
+              <ProjectCard
+                key={repo.id}
+                project={{
+                  title: repo.name,
+                  description: repo.description,
+                  tech: [repo.language],
+                  link: repo.html_url
+                }}
+              />
+            ))}
+
+            {showMore &&
+              applyFilter(extraProjects).map((repo) => (
+                <ProjectCard
+                  key={repo.id}
+                  project={{
+                    title: repo.name,
+                    description: repo.description,
+                    tech: [repo.language],
+                    link: repo.html_url
+                  }}
+                />
+              ))}
+          </>
         )}
       </motion.div>
+
+      {/* Show More Button */}
+      {!loading && extraProjects.length > 0 && (
+        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+          <button
+            onClick={() => setShowMore(!showMore)}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#00bfff',
+              border: 'none',
+              color: 'white',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            {showMore ? 'Show Less' : 'Show More Projects'}
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 };
