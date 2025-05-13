@@ -9,23 +9,21 @@ const Projects = () => {
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Define pinned repositories by name (GitHub repo names)
-    const pinnedRepoNames = [
-      "flask-file-share",
-      "polycarp-dev-portfolio",
-      "rust",
-      "hms",
-      "PrivacyLLM",
-      "tracker-for-covid19"
-    ];
+  const pinnedRepoNames = [
+    "flask-file-share",
+    "polycarp-dev-portfolio",
+    "telco_churn_prediction",
+    "console-grid-game",
+    "PrivacyLLM",
+    "Airline-Ticket-Reservation-System-Design"
+  ];
 
-
-  const techStacks = ["All", "React", "Flask", "Python", "API"];
+  const techStacks = ["All", "React", "Flask", "Python", "Java", "Javascript", "API"];
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await axios.get("https://api.github.com/users/pollycarp/repos?sort=updated");
+        const res = await axios.get("https://api.github.com/users/pollycarp/repos?sort=updated&per_page=100");
         setProjects(res.data);
       } catch (err) {
         console.error("GitHub API error:", err);
@@ -37,7 +35,6 @@ const Projects = () => {
     fetchRepos();
   }, []);
 
-  // Split pinned and extra projects
   const pinnedProjects = projects.filter((repo) => pinnedRepoNames.includes(repo.name));
   const extraProjects = projects.filter((repo) => !pinnedRepoNames.includes(repo.name));
 
@@ -87,7 +84,7 @@ const Projects = () => {
         ))}
       </motion.div>
 
-      {/* Project Cards Grid */}
+      {/* Pinned Projects */}
       <motion.div
         layout
         initial={{ opacity: 0 }}
@@ -102,10 +99,37 @@ const Projects = () => {
         {loading ? (
           <p>Loading projects...</p>
         ) : (
-          <>
-            {applyFilter(pinnedProjects).map((repo) => (
+          applyFilter(pinnedProjects).map((repo) => (
+            <ProjectCard
+              key={repo.id}
+              project={{
+                title: repo.name,
+                description: repo.description,
+                tech: [repo.language],
+                link: repo.html_url
+              }}
+            />
+          ))
+        )}
+      </motion.div>
+
+      {/* Animated Extra Projects */}
+      {showMore && (
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut", delayChildren: 0.3, staggerChildren: 0.1 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '1.5rem',
+            marginTop: '2rem'
+          }}
+        >
+          {applyFilter(extraProjects).map((repo) => (
+            <motion.div key={repo.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
               <ProjectCard
-                key={repo.id}
                 project={{
                   title: repo.name,
                   description: repo.description,
@@ -113,23 +137,10 @@ const Projects = () => {
                   link: repo.html_url
                 }}
               />
-            ))}
-
-            {showMore &&
-              applyFilter(extraProjects).map((repo) => (
-                <ProjectCard
-                  key={repo.id}
-                  project={{
-                    title: repo.name,
-                    description: repo.description,
-                    tech: [repo.language],
-                    link: repo.html_url
-                  }}
-                />
-              ))}
-          </>
-        )}
-      </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
 
       {/* Show More Button */}
       {!loading && extraProjects.length > 0 && (
