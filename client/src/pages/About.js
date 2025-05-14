@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import profilePic from '../assets/profile.jpg';
+import { FaGithub } from 'react-icons/fa';
+import { useInView } from 'react-intersection-observer';
+import ReactToPrint from 'react-to-print';
 
 const skills = [
   'React.js', 'Flask', 'Node.js', 'Python', 'JavaScript',
@@ -41,32 +44,46 @@ const timeline = [
   }
 ];
 
-const projects = [
-  {
-    title: 'polycarp-dev-portfolio',
-    description: 'A fully animated, responsive personal portfolio built using React.js, Framer Motion, Flask, and Bootstrap, featuring interactive routing, GitHub project integration, and a custom contact form.'
-  },
-  {
-    title: 'flask-file-share',
-    description: 'A secure file-sharing platform built using Flask, React, and Google Auth. Supports download tracking, admin controls, and password-protected access.'
-  },
-  {
-    title: 'console-grid-game',
-    description: 'A Python-based console game using object-oriented principles and grid logic, featuring obstacles, point collection, and player navigation via CLI.'
-  },
-  {
-    title: 'Airline-Ticket-Reservation-System-Design',
-    description: 'A core Java-based system for managing airline reservations, flight schedules, passenger records, and booking status with basic GUI support.'
-  },
-  {
-    title: 'telco_churn_prediction',
-    description: 'A full-stack machine learning app using Flask, scikit-learn, and pandas. Supports real-time churn prediction, CSV upload, data visualization, and chart rendering via Chart.js.'
-  },
-  {
-    title: 'PrivacyLLM',
-    description: 'A Python research project exploring language model safety and prompt injection vulnerabilities using OpenAI’s GPT APIs and masking strategies.'
-  }
-];
+const projects = {
+  Flask: [
+    {
+      title: 'flask-file-share',
+      description: 'A secure file-sharing platform built using Flask, React, and Google Auth. Supports download tracking, admin controls, and password-protected access.',
+      link: 'https://github.com/pollycarp/flask-file-share'
+    },
+    {
+      title: 'telco_churn_prediction',
+      description: 'A full-stack machine learning app using Flask, scikit-learn, and pandas. Supports real-time churn prediction, CSV upload, data visualization, and chart rendering via Chart.js.',
+      link: 'https://github.com/pollycarp/telco_churn_prediction'
+    }
+  ],
+  React: [
+    {
+      title: 'polycarp-dev-portfolio',
+      description: 'A fully animated, responsive personal portfolio built using React.js, Framer Motion, Flask, and Bootstrap, featuring interactive routing, GitHub project integration, and a custom contact form.',
+      link: 'https://github.com/pollycarp/polycarp-dev-portfolio'
+    }
+  ],
+  Python: [
+    {
+      title: 'console-grid-game',
+      description: 'A Python-based console game using object-oriented principles and grid logic, featuring obstacles, point collection, and player navigation via CLI.',
+      link: 'https://github.com/pollycarp/console-grid-game'
+    },
+    {
+      title: 'PrivacyLLM',
+      description: 'A Python research project exploring language model safety and prompt injection vulnerabilities using OpenAI’s GPT APIs and masking strategies.',
+      link: 'https://github.com/pollycarp/PrivacyLLM'
+    }
+  ],
+  Java: [
+    {
+      title: 'Airline-Ticket-Reservation-System-Design',
+      description: 'A core Java-based system for managing airline reservations, flight schedules, passenger records, and booking status with basic GUI support.',
+      link: 'https://github.com/pollycarp/Airline-Ticket-Reservation-System-Design'
+    }
+  ]
+};
 
 
 const About = () => {
@@ -175,29 +192,58 @@ const About = () => {
         </div>
       </div>
 
-      {/* Technical Projects */}
-      <div style={{ maxWidth: '1000px', width: '100%', marginTop: '3rem' }}>
-        <h3 style={{ textAlign: 'center', color: '#00bfff' }}>Technical Projects</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1.5rem' }}>
-          {projects.map((proj, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 * i }}
-              style={{
-                backgroundColor: '#ffffff10',
-                border: '1px solid #00bfff',
-                padding: '1rem 1.2rem',
-                borderRadius: '6px'
-              }}
-            >
-              <h5>{proj.title}</h5>
-              <p style={{ color: '#ccc', fontSize: '0.95rem' }}>{proj.description}</p>
-            </motion.div>
+        {/* Technical Projects */}
+        <div style={{ maxWidth: '1000px', width: '100%', marginTop: '3rem' }}>
+          <h3 style={{ textAlign: 'center', color: '#00bfff' }}>Technical Projects</h3>
+
+          {Object.entries(projects).map(([stack, projList], stackIndex) => (
+            <div key={stack} style={{ marginTop: '2.5rem' }}>
+              <h4 style={{ color: '#fff', borderBottom: '1px solid #00bfff', paddingBottom: '0.3rem' }}>
+                {stack}
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
+                {projList.map((proj, i) => {
+                  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
+                  return (
+                    <motion.div
+                      key={proj.title}
+                      ref={ref}
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ delay: i * 0.1, duration: 0.6 }}
+                      style={{
+                        backgroundColor: '#ffffff10',
+                        border: '1px solid #00bfff',
+                        padding: '1rem 1.2rem',
+                        borderRadius: '6px'
+                      }}
+                    >
+                      <h5 style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <FaGithub style={{ color: '#00bfff' }} />
+                        <a
+                          href={proj.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: '#00bfff',
+                            textDecoration: 'none',
+                            fontWeight: 'bold',
+                            fontSize: '1.05rem'
+                          }}
+                          onMouseOver={(e) => (e.target.style.textDecoration = 'underline')}
+                          onMouseOut={(e) => (e.target.style.textDecoration = 'none')}
+                        >
+                          {proj.title}
+                        </a>
+                      </h5>
+                      <p style={{ color: '#ccc', fontSize: '0.95rem' }}>{proj.description}</p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
 
       {/* Resume Button */}
       <div style={{ marginTop: '3rem' }}>

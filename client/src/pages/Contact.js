@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
@@ -8,16 +8,11 @@ const Contact = () => {
   const [toast, setToast] = useState({ show: false, message: '', variant: 'info' });
   const toastRef = useRef(null);
 
-  const isValidEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleBlur = (e) => {
-    setTouched({ ...touched, [e.target.name]: true });
-  };
+  const handleBlur = (e) => setTouched({ ...touched, [e.target.name]: true });
 
   const isFieldInvalid = (name) => {
     if (!touched[name]) return false;
@@ -27,19 +22,14 @@ const Contact = () => {
 
   const showToast = (message, variant = 'info') => {
     setToast({ show: true, message, variant });
-    setTimeout(() => setToast({ ...toast, show: false }), 4000);
+    setTimeout(() => setToast({ show: false, message: '', variant: 'info' }), 4000);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setTouched({ name: true, email: true, message: true });
 
-    if (
-      !formData.name.trim() ||
-      !isValidEmail(formData.email) ||
-      !formData.message.trim()
-    ) {
+    if (!formData.name.trim() || !isValidEmail(formData.email) || !formData.message.trim()) {
       showToast('Please fill out all fields correctly.', 'danger');
       return;
     }
@@ -56,63 +46,93 @@ const Contact = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-      className="container mt-5"
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
+        padding: '4rem 2rem',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#fff'
+      }}
     >
-      <div className="card shadow p-4 position-relative">
-        <h2 className="mb-4">Contact Me</h2>
+      <motion.div
+        className="shadow-lg"
+        style={{
+          width: '100%',
+          maxWidth: '600px',
+          backgroundColor: '#ffffff10',
+          border: '1px solid #00bfff',
+          borderRadius: '12px',
+          padding: '2rem',
+          backdropFilter: 'blur(5px)',
+          position: 'relative'
+        }}
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <h2 className="text-center mb-4" style={{ color: '#00bfff' }}>Contact Me</h2>
+
         <form onSubmit={handleSubmit} noValidate>
-          {/* Name Field */}
+          {/* Name */}
           <div className="mb-3">
             <label className="form-label">Your Name</label>
             <input
               type="text"
               name="name"
+              className={`form-control ${isFieldInvalid('name') ? 'is-invalid' : ''}`}
               value={formData.name}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`form-control ${isFieldInvalid('name') ? 'is-invalid' : ''}`}
+              placeholder="John Doe"
             />
             {isFieldInvalid('name') && <div className="invalid-feedback">Name is required.</div>}
           </div>
 
-          {/* Email Field */}
+          {/* Email */}
           <div className="mb-3">
             <label className="form-label">Your Email</label>
             <input
               type="email"
               name="email"
+              className={`form-control ${isFieldInvalid('email') ? 'is-invalid' : ''}`}
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`form-control ${isFieldInvalid('email') ? 'is-invalid' : ''}`}
+              placeholder="you@example.com"
             />
-            {isFieldInvalid('email') && (
-              <div className="invalid-feedback">Enter a valid email address.</div>
-            )}
+            {isFieldInvalid('email') && <div className="invalid-feedback">Enter a valid email address.</div>}
           </div>
 
-          {/* Message Field */}
+          {/* Message */}
           <div className="mb-3">
             <label className="form-label">Your Message</label>
             <textarea
               name="message"
+              className={`form-control ${isFieldInvalid('message') ? 'is-invalid' : ''}`}
               value={formData.message}
               onChange={handleChange}
               onBlur={handleBlur}
               rows="4"
-              className={`form-control ${isFieldInvalid('message') ? 'is-invalid' : ''}`}
+              placeholder="Type your message here..."
             />
-            {isFieldInvalid('message') && (
-              <div className="invalid-feedback">Message cannot be empty.</div>
-            )}
+            {isFieldInvalid('message') && <div className="invalid-feedback">Message cannot be empty.</div>}
           </div>
 
-          <button type="submit" className="btn btn-primary">Send</button>
+          {/* Submit */}
+          <button
+            type="submit"
+            className="btn btn-info text-white w-100 fw-bold shadow-sm"
+            style={{ borderRadius: '6px' }}
+          >
+            Send Message
+          </button>
         </form>
 
         {/* Toast Notification */}
@@ -121,19 +141,20 @@ const Contact = () => {
             ref={toastRef}
             className={`toast align-items-center text-white bg-${toast.variant} border-0 position-absolute top-0 end-0 m-3 show`}
             role="alert"
+            style={{ zIndex: 1050, minWidth: '250px' }}
           >
             <div className="d-flex">
               <div className="toast-body">{toast.message}</div>
               <button
                 type="button"
                 className="btn-close btn-close-white me-2 m-auto"
-                onClick={() => setToast({ ...toast, show: false })}
+                onClick={() => setToast({ show: false, message: '', variant: 'info' })}
               ></button>
             </div>
           </div>
         )}
-      </div>
-    </motion.div>
+      </motion.div>
+    </motion.section>
   );
 };
 

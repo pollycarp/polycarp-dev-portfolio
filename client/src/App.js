@@ -9,17 +9,18 @@ import Projects from './pages/Projects';
 import Contact from './pages/Contact';
 import About from './pages/About';
 
+
 const routeMessages = {
-  '/': '> Welcome back, kingslayer254...',
-  '/projects': '> Fetching deployed code...',
-  '/contact': '> Connecting you to Polycarp...',
+  '/': '</> "l am not a great programmer, l am just a good programmer with great habits"  - Kent Beck',
+  '/projects': '> Fetching Repos...',
+  '/contact': '> Connecting you ...',
 };
 
 const AnimatedRoutes = ({ loading, setLoading, setRouteMessage }) => {
   const location = useLocation();
 
   useEffect(() => {
-    const message = routeMessages[location.pathname] || '> Loading Polycarp.dev...';
+    const message = routeMessages[location.pathname] || '"lf, at frst, you do not succeed, call it version 1.0." ~ Khayri R.R. Woulfe';
     setRouteMessage(message);
     setLoading(true);
 
