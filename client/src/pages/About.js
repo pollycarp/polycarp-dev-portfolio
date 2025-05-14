@@ -4,6 +4,8 @@ import profilePic from '../assets/profile.jpg';
 import { FaGithub } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
 import ReactToPrint from 'react-to-print';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFResume from '../components/PDFResume';
 
 const skills = [
   'React.js', 'Flask', 'Node.js', 'Python', 'JavaScript',
@@ -246,24 +248,25 @@ const About = () => {
         </div>
 
       {/* Resume Button */}
-      <div style={{ marginTop: '3rem' }}>
-        <a
-          href="/Polycarp_Resume.pdf"
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '0.75rem 1.5rem',
-            backgroundColor: '#00bfff',
-            color: '#fff',
-            borderRadius: '6px',
-            fontWeight: 'bold',
-            textDecoration: 'none'
-          }}
-        >
-          Download Resume
-        </a>
-      </div>
+        <div style={{ marginTop: '3rem' }}>
+          <PDFDownloadLink
+            document={<PDFResume />}
+            fileName="Polycarp_Kingori_Resume.pdf"
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#00bfff',
+              color: '#fff',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              textDecoration: 'none'
+            }}
+          >
+            {({ loading }) =>
+              loading ? 'Preparing Resume...' : 'Download Resume'
+            }
+          </PDFDownloadLink>
+        </div>
+
     </motion.section>
   );
 };

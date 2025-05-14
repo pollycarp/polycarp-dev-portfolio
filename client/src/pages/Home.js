@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import profilePic from '../assets/profile.jpg';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFResume from '../components/PDFResume';
 
 const nameChars = ['P', 'o', 'l', 'y', 'c', 'a', 'r', 'p'];
 
@@ -78,15 +80,20 @@ const Home = ({ loading }) => {
         <div className="d-flex justify-content-center gap-3 flex-wrap mt-3">
           <a href="/projects" className="btn btn-outline-light">View Projects</a>
           <a href="/contact" className="btn btn-info text-white">Contact Me</a>
-          <a
-            href="/Polycarp_Resume.pdf"
-            className="btn btn-outline-warning"
-            download
-            target="_blank"
-            rel="noopener noreferrer"
+
+          <PDFDownloadLink
+            document={<PDFResume />}
+            fileName="Polycarp_Kingori_Resume.pdf"
+            style={{
+              textDecoration: 'none'
+            }}
           >
-            Download Resume
-          </a>
+            {({ loading }) => (
+              <button className="btn btn-outline-warning" disabled={loading}>
+                {loading ? 'Preparing Resume...' : 'Download Resume'}
+              </button>
+            )}
+          </PDFDownloadLink>
         </div>
 
       </div>
