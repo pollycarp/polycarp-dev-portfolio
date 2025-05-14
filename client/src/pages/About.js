@@ -6,9 +6,11 @@ import { useInView } from 'react-intersection-observer';
 import ReactToPrint from 'react-to-print';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDFResume from '../components/PDFResume';
+import '../styles/About.css';
+
 
 const skills = [
-  'React.js', 'Flask', 'Node.js', 'Python', 'JavaScript',
+  'React.js', 'Flask', 'Node.js', 'Python', 'Java', 'JavaScript',
   'PostgreSQL', 'MongoDB', 'MySQL', 'Git', 'REST APIs',
   'Excel & Pandas', 'Tailwind CSS', 'Figma', 'Agile'
 ];
@@ -91,83 +93,52 @@ const projects = {
 const About = () => {
   return (
     <motion.section
+      className="about-section"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      style={{
-        minHeight: '100vh',
-        padding: '4rem 2rem',
-        background: 'linear-gradient(to right, #2c5364, #203a43, #0f2027)',
-        color: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
     >
       {/* Core Card */}
-      <div style={{
-        maxWidth: '1000px',
-        width: '100%',
-        backgroundColor: '#ffffff10',
-        borderRadius: '12px',
-        padding: '3rem',
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '2rem',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
-      }}>
+      <div className="about-card">
         {/* Profile Image */}
         <motion.img
           src={profilePic}
           alt="Polycarp"
-          style={{
-            borderRadius: '50%',
-            width: '180px',
-            height: '180px',
-            objectFit: 'cover',
-            border: '4px solid #00bfff',
-            flexShrink: 0
-          }}
+          className="about-image"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
         />
 
         {/* Text */}
-        <div style={{ flex: 1, minWidth: '300px' }}>
-          <h2 style={{ fontSize: '2rem', color: '#00bfff' }}>Mark Polycarp</h2>
-          <p style={{ marginBottom: '0.2rem' }}><strong>Full Stack Developer</strong> | Nairobi, Kenya</p>
-          <p style={{ fontSize: '0.95rem', color: '#ccc' }}>
+        <div className="about-text">
+          <h2 className="about-name">Mark Polycarp</h2>
+          <p className="about-title"><strong>Full Stack Developer</strong> | Nairobi, Kenya</p>
+          <p className="about-meta">
             <strong>Email:</strong> markpollycarp@gmail.com<br />
             <strong>Phone:</strong> 0794 386 844<br />
-            <strong>GitHub:</strong> <a href="https://github.com/pollycarp" target="_blank" rel="noopener noreferrer" style={{ color: '#00bfff' }}>github.com/pollycarp</a>
+            <strong>GitHub:</strong>{' '}
+            <a href="https://github.com/pollycarp" target="_blank" rel="noopener noreferrer" className="about-link">
+              github.com/pollycarp
+            </a>
           </p>
 
-          <p style={{ marginTop: '1rem', lineHeight: '1.6' }}>
+          <p className="about-summary">
             Motivated and detail-oriented full-stack developer with a strong foundation in web development, system design, and data handling. Passionate about building efficient, scalable web tools and automating data processes to streamline operations and improve integrity.
           </p>
 
           {/* Skills */}
-          <div style={{ marginTop: '2rem' }}>
-            <h4 style={{ color: '#fff' }}>Core Skills</h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginTop: '1rem' }}>
+          <div className="skills-section">
+            <h4>Core Skills</h4>
+            <div className="skills-wrapper">
               {skills.map((skill) => (
-                <span key={skill} style={{
-                  padding: '0.5rem 1rem',
-                  backgroundColor: '#00bfff',
-                  borderRadius: '20px',
-                  fontSize: '0.9rem',
-                  fontWeight: 500
-                }}>
-                  {skill}
-                </span>
+                <span className="skill-badge" key={skill}>{skill}</span>
               ))}
             </div>
           </div>
         </div>
       </div>
-
       {/* Experience Timeline */}
       <div style={{ maxWidth: '1000px', width: '100%', marginTop: '3rem' }}>
         <h3 style={{ textAlign: 'center', color: '#00bfff' }}>Experience & Education</h3>

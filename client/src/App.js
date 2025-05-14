@@ -11,7 +11,7 @@ import About from './pages/About';
 
 
 const routeMessages = {
-  '/': '"l am not a great programmer, l am just a good programmer with great habits"  - Kent Beck',
+  '/': 'Stay Bold, Stay Bizarre, Stay Building!!',
   '/projects': '> Fetching Repos...',
   '/contact': '> Connecting you ...',
 };

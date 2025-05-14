@@ -1,76 +1,68 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const badgeColors = {
-  JavaScript: '#f7df1e',
-  Python: '#3572A5',
-  HTML: '#e34c26',
-  CSS: '#563d7c',
-  Rust: '#dea584',
-  default: '#6c757d'
-};
-
 const ProjectCard = ({ project }) => {
-  const language = project.tech[0] || 'Other';
-  const badgeColor = badgeColors[language] || badgeColors.default;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
       whileHover={{ scale: 1.03 }}
-      transition={{ duration: 0.4 }}
       style={{
-        borderRadius: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        padding: '1rem',
         backgroundColor: '#fff',
-        padding: '1.5rem',
-        boxShadow: '0 8px 20px rgba(0,0,0,0.05)',
-        height: '100%',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        transition: 'all 0.3s ease-in-out'
+        minHeight: '180px',
       }}
     >
-      <div>
-        <h4 className="mb-2 text-dark">{project.title}</h4>
-        <p className="text-muted" style={{ fontSize: '0.95rem' }}>
+      <div style={{ flex: 1 }}>
+        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', wordBreak: 'break-word' }}>
+          {project.title}
+        </h3>
+        <p style={{ fontSize: '0.95rem', color: '#555', marginBottom: '1rem' }}>
           {project.description || 'No description provided.'}
         </p>
       </div>
 
-      <div style={{ marginTop: '1rem' }}>
-        {/* Tech Badge */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '0.5rem',
+          marginTop: 'auto',
+        }}
+      >
         <span
           style={{
-            backgroundColor: badgeColor,
-            color: '#000',
+            padding: '0.3rem 0.8rem',
+            backgroundColor: getBadgeColor(project.tech[0]),
+            color: '#fff',
+            borderRadius: '16px',
+            fontSize: '0.75rem',
             fontWeight: 'bold',
-            fontSize: '0.8rem',
-            padding: '0.2rem 0.6rem',
-            borderRadius: '20px',
-            marginRight: '0.5rem'
           }}
         >
-          {language}
+          {project.tech[0] || 'N/A'}
         </span>
 
-        {/* GitHub Link */}
         {project.link && (
           <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              display: 'inline-block',
-              marginTop: '0.5rem',
               fontSize: '0.85rem',
-              fontWeight: '500',
               color: '#00bfff',
-              textDecoration: 'none'
+              fontWeight: '500',
+              textDecoration: 'none',
             }}
-            onMouseOver={(e) => (e.target.style.textDecoration = 'underline')}
-            onMouseOut={(e) => (e.target.style.textDecoration = 'none')}
           >
             View on GitHub →
           </a>
@@ -78,6 +70,18 @@ const ProjectCard = ({ project }) => {
       </div>
     </motion.div>
   );
+};
+
+// 🔧 Helper for language-based badge coloring
+const getBadgeColor = (tech) => {
+  switch ((tech || '').toLowerCase()) {
+    case 'python': return '#3572A5';
+    case 'javascript': return '#f0db4f';
+    case 'html': return '#e44d26';
+    case 'java': return '#b07219';
+    case 'react': return '#61DBFB';
+    default: return '#555';
+  }
 };
 
 export default ProjectCard;

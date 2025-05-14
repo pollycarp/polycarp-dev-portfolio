@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 
 // Skills, Timeline, and Projects
 const skills = [
-  'React.js', 'Flask', 'Node.js', 'Python', 'JavaScript',
+  'React.js', 'Flask', 'Node.js', 'Python', 'Java', 'JavaScript',
   'PostgreSQL', 'MongoDB', 'MySQL', 'Git', 'REST APIs',
   'Excel & Pandas', 'Tailwind CSS', 'Figma', 'Agile'
 ];
