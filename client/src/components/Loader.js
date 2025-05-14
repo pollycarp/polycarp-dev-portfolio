@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-const typingSpeed = 70; // already fast; adjust if needed
-const loop = false;     // keep as false for one-pass
-
+const typingSpeed = 70;
+const loop = false;
 
 const Loader = ({ message }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [index, setIndex] = useState(0);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
+    const hasShownLoader = localStorage.getItem('hasShownLoader');
+
+    if (!hasShownLoader) {
+      localStorage.setItem('hasShownLoader', 'true');
+      setShouldRender(true);
+    } else {
+      setShouldRender(false); // skip animation
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
     let i = 0;
     setDisplayedText('');
     const interval = setInterval(() => {
@@ -21,7 +34,9 @@ const Loader = ({ message }) => {
       }
     }, typingSpeed);
     return () => clearInterval(interval);
-  }, [message]);
+  }, [message, shouldRender]);
+
+  if (!shouldRender) return null;
 
   return (
     <motion.div
@@ -39,11 +54,15 @@ const Loader = ({ message }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '2rem',
+        textAlign: 'center',
         color: '#00bfff',
-        fontSize: '1.5rem',
+        fontSize: 'clamp(1rem, 4vw, 1.5rem)',
         fontFamily: 'Courier New, monospace',
         zIndex: 9999,
-        whiteSpace: 'pre'
+        whiteSpace: 'pre-wrap', // wrap long messages
+        wordWrap: 'break-word',
+        overflowWrap: 'break-word'
       }}
     >
       {displayedText}

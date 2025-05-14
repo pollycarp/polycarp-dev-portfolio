@@ -9,7 +9,6 @@ import Projects from './pages/Projects';
 import Contact from './pages/Contact';
 import About from './pages/About';
 
-
 const routeMessages = {
   '/': 'Stay Bold, Stay Bizarre, Stay Building!!',
   '/projects': '> Fetching Repos...',
@@ -20,17 +19,29 @@ const AnimatedRoutes = ({ loading, setLoading, setRouteMessage }) => {
   const location = useLocation();
 
   useEffect(() => {
-    const message = routeMessages[location.pathname] || '"lf, at frst, you do not succeed, call it version 1.0." ~ Khayri R.R. Woulfe';
-    setRouteMessage(message);
-    setLoading(true);
+    const hasShownLoader = localStorage.getItem('hasShownLoader');
 
-    const typingSpeed = 70;
-    const bufferTime = 600;
-    const totalDuration = message.length * typingSpeed + bufferTime;
+    if (!hasShownLoader) {
+      const message =
+        routeMessages[location.pathname] ||
+        '"If at first, you do not succeed, call it version 1.0." ~ Khayri R.R. Woulfe';
 
-    const timeout = setTimeout(() => setLoading(false), totalDuration);
+      setRouteMessage(message);
+      setLoading(true);
 
-    return () => clearTimeout(timeout);
+      const typingSpeed = 70;
+      const bufferTime = 600;
+      const totalDuration = message.length * typingSpeed + bufferTime;
+
+      const timeout = setTimeout(() => {
+        setLoading(false);
+        localStorage.setItem('hasShownLoader', 'true');
+      }, totalDuration);
+
+      return () => clearTimeout(timeout);
+    } else {
+      setLoading(false); // Skip animation if already shown
+    }
   }, [location, setLoading, setRouteMessage]);
 
   return (
@@ -48,6 +59,13 @@ const AnimatedRoutes = ({ loading, setLoading, setRouteMessage }) => {
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [routeMessage, setRouteMessage] = useState('> Loading Polycarp.dev...');
+
+  // ✅ Reset loader state on reload
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      localStorage.removeItem('hasShownLoader');
+    };
+  }, []);
 
   return (
     <Router>
