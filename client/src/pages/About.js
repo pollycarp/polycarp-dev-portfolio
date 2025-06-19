@@ -16,23 +16,29 @@ const skills = [
 ];
 
 const timeline = [
+   {
+    title: 'Operations Support Intern (Data Focus)',
+    subtitle: 'UN SACCO, Nairobi',
+    date: '2025',
+    description: 'Supported data verification, Excel-based record keeping, and digital archiving. Assisted in cleaning and organizing spreadsheets for reporting accuracy. Liaised with departments to resolve unclear or missing records. Applied Python and Excel tools to streamline internal workflows.'
+   },
   {
     title: 'Full-Stack Developer',
     subtitle: 'Freelance & Open Source',
-    date: '2023 – Present',
+    date: '2023 – 2024',
     description: 'Built secure web platforms, APIs, and dashboards using Flask, React.js, PostgreSQL, and cloud-based tools.'
-  },
-  {
-    title: 'Software Engineering Intern',
-    subtitle: 'Ministry of ICT, Kenya',
-    date: '2023',
-    description: 'Contributed to the development of the Ajira Web Application using Python and Flask. Worked on authentication and dashboard modules.'
   },
   {
     title: 'ALX Software Engineering Program',
     subtitle: 'ALX Africa',
     date: '2023',
     description: 'Completed an intensive software engineering program focused on full-stack development, Agile methodologies, CI/CD pipelines, and DevOps practices.'
+  },
+  {
+    title: 'Software Engineering Intern',
+    subtitle: 'Ministry of ICT, Kenya',
+    date: '2022',
+    description: 'Contributed to the development of the Ajira Web Application using Python and Flask. Worked on authentication and dashboard modules.'
   },
   {
     title: 'NEAR Blockchain Developer',
