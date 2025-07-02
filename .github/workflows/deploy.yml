@@ -1,0 +1,28 @@
+# Name of the workflow
+name: Deploy polycarp-dev-portfolio
+
+# Specifies when the workflow should be triggered
+on:
+  push:
+    branches:
+      - main  # Trigger only on pushes to the main branch
+
+# Define the jobs to run
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Virtual machine to run the job
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t polycarp-dev-portfolio .
+
+      # Step 3: Run the Docker container
+      - name: Run Docker container
+        run: |
+          docker run -d -p 5000:7860 polycarp-dev-portfolio
