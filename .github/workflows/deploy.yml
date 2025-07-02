@@ -1,4 +1,4 @@
-name: CI · Build & Deploy polycarp-dev-portfolio
+name: CI · Build & Push web-frameworks
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,25 +22,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build & Push image
+    - name: Build & push image to Docker Hub (web-frameworks repo)
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
-
-    # ✅ FIXED: Removed invalid `if:` expression
-    - name: Deploy to Droplet via SSH
-      uses: appleboy/ssh-action@v1
-      with:
-        host: ${{ secrets.DO_HOST }}
-        username: root
-        key: ${{ secrets.DO_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
-          docker stop polycarp-dev-portfolio || true
-          docker rm   polycarp-dev-portfolio || true
-          docker run -d \
-            --name polycarp-dev-portfolio \
-            -p 80:7860 \
-            ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/web-frameworks:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/web-frameworks:${{ github.sha }}
