@@ -1,46 +1,42 @@
-name: CI · Build & Deploy polycarp-dev-portfolio
+name: CI · Build & Push polycarp-dev-portfolio
 
+# ────────────────────────────────
+# When to run
+# ────────────────────────────────
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  push:                     # every push to…
+    branches: [ main ]      # …the main branch
+  workflow_dispatch:        # plus a manual “Run workflow” button
 
+# ────────────────────────────────
+# Job definition
+# ────────────────────────────────
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
+    # 1️⃣  Check out the repo
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # 2️⃣  Set up Docker Buildx (modern builder with cache support)
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    # 3️⃣  Log in to Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build & Push image
+    # 4️⃣  Build and push the image
+    - name: Build & push image to Docker Hub
       uses: docker/build-push-action@v5
       with:
-        context: .
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
-
-    # ✅ FIXED: Removed invalid `if:` expression
-    - name: Deploy to Droplet via SSH
-      uses: appleboy/ssh-action@v1
-      with:
-        host: ${{ secrets.DO_HOST }}
-        username: root
-        key: ${{ secrets.DO_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
-          docker stop polycarp-dev-portfolio || true
-          docker rm   polycarp-dev-portfolio || true
-          docker run -d \
-            --name polycarp-dev-portfolio \
-            -p 80:7860 \
-            ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
+        context: .                       # build from repo root
+        push: true                       # push after build
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:${{ github.sha }}
