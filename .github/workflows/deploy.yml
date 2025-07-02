@@ -2,41 +2,35 @@ name: CI · Build & Deploy polycarp-dev-portfolio
 
 on:
   push:
-    branches: [ main ]          # run on every push to main
-  workflow_dispatch:            # …or run manually from the Actions tab
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣  Check out source code
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # 2️⃣  Set up Docker Buildx (enables multi-arch & cache)
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # 3️⃣  Log in to Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # 4️⃣  Build and push the image
     - name: Build & Push image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/polycarp-dev-portfolio:latest
-        # optional: add "cache-from" / "cache-to" for faster builds
 
-    # 5️⃣  Deploy on DigitalOcean (skip this step if not needed)
+    # ✅ FIXED: Removed invalid `if:` expression
     - name: Deploy to Droplet via SSH
-      if: ${{ secrets.DO_HOST && secrets.DO_SSH_KEY }}   # runs only if both secrets exist
       uses: appleboy/ssh-action@v1
       with:
         host: ${{ secrets.DO_HOST }}
