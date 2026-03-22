@@ -1,198 +1,312 @@
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet, Link } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-// Define PDF styles
+// PDF styles
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    paddingTop: 32,
+    paddingBottom: 32,
+    paddingHorizontal: 34,
     fontFamily: 'Helvetica',
-    fontSize: 11,
-    lineHeight: 1.6,
-    color: '#333'
+    fontSize: 10,
+    lineHeight: 1.45,
+    color: '#1f2937',
   },
   header: {
-    borderBottom: '2px solid #00bfff',
     marginBottom: 12,
-    paddingBottom: 6,
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#00bfff',
   },
   name: {
     fontSize: 22,
+    fontWeight: 'bold',
     color: '#00bfff',
     marginBottom: 4,
-    fontWeight: 'bold'
   },
-  contact: {
+  contactLine: {
+    fontSize: 9.5,
+    color: '#374151',
+    marginBottom: 2,
+  },
+  roleTitle: {
+    marginTop: 8,
     fontSize: 11,
-    lineHeight: 1.4,
-    color: '#444'
+    fontWeight: 'bold',
+    color: '#111827',
+  },
+  tagline: {
+    marginTop: 4,
+    fontSize: 10,
+    color: '#4b5563',
   },
   section: {
-    marginTop: 20
+    marginTop: 14,
   },
   sectionTitle: {
-    fontSize: 14,
-    marginBottom: 6,
+    fontSize: 12,
+    fontWeight: 'bold',
     color: '#00bfff',
-    fontWeight: 'bold',
-    borderBottom: '1px solid #ccc',
-    paddingBottom: 4
+    marginBottom: 6,
+    paddingBottom: 3,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d1d5db',
   },
-  subheading: {
+  paragraph: {
+    fontSize: 10,
+    color: '#1f2937',
+  },
+  skillsGrid: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  skillItem: {
+    width: '50%',
+    paddingRight: 8,
+    marginBottom: 3,
+    fontSize: 9.5,
+  },
+  entry: {
+    marginBottom: 10,
+  },
+  entryHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 2,
+  },
+  entryTitle: {
+    fontSize: 10.5,
     fontWeight: 'bold',
-    fontSize: 11
+    color: '#111827',
+    width: '68%',
+  },
+  entryDate: {
+    fontSize: 9.5,
+    color: '#374151',
+    textAlign: 'right',
+    width: '32%',
+  },
+  entrySubtitle: {
+    fontSize: 9.5,
+    color: '#4b5563',
+    marginBottom: 3,
+  },
+  bulletRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 2,
+    paddingRight: 6,
   },
   bullet: {
-    marginLeft: 8,
-    marginBottom: 2
+    width: 10,
+    fontSize: 10,
   },
-  listItem: {
-    marginBottom: 4
-  }
+  bulletText: {
+    flex: 1,
+    fontSize: 9.5,
+  },
+  certItem: {
+    marginBottom: 4,
+    fontSize: 9.5,
+  },
 });
 
-// Skills, Timeline, and Projects
-const skills = [
-  'React.js', 'Flask', 'Node.js', 'Python', 'Java', 'JavaScript',
-  'PostgreSQL', 'MongoDB', 'MySQL', 'Git', 'REST APIs',
-  'Excel & Pandas', 'Tailwind CSS', 'Figma', 'Agile'
-];
-
-const timeline = [
-   {
-    title: 'Operations Support Intern (Data Focus)',
-    subtitle: 'UN SACCO, Nairobi',
-    date: '2025',
-    description: 'Supported data verification, Excel-based record keeping, and digital archiving. Assisted in cleaning and organizing spreadsheets for reporting accuracy. Liaised with departments to resolve unclear or missing records. Applied Python and Excel tools to streamline internal workflows.'
-   },
-  {
-    title: 'Full-Stack Developer',
-    subtitle: 'Freelance & Open Source',
-    date: '2023 – 2024',
-    description: 'Built secure web platforms, APIs, and dashboards using Flask, React.js, PostgreSQL, and cloud-based tools.'
-  },
-  {
-    title: 'ALX Software Engineering Program',
-    subtitle: 'ALX Africa',
-    date: '2023',
-    description: 'Completed an intensive software engineering program focused on full-stack development, Agile methodologies, CI/CD pipelines, and DevOps practices.'
-  },
-  {
-    title: 'Software Engineering Intern',
-    subtitle: 'Ministry of ICT, Kenya',
-    date: '2022',
-    description: 'Contributed to the development of the Ajira Web Application using Python and Flask. Worked on authentication and dashboard modules.'
-  },
-  {
-    title: 'NEAR Blockchain Developer',
-    subtitle: 'Open Web Community',
-    date: '2022',
-    description: 'Built my first Rust-based smart contract and deployed a basic DApp as part of NEAR’s blockchain learning cohort.'
-  },
-  {
-    title: 'Computer Science Graduate',
-    subtitle: 'Maseno University, Kenya',
-    date: '2018 – 2022',
-    description: 'Focused on web technologies, backend systems, and database design with projects in AI and software engineering.'
-  }
-];
-
-const projects = {
-  Flask: [
-    {
-      title: 'flask-file-share',
-      description: 'A secure file-sharing platform built using Flask, React, and Google Auth. Supports download tracking, admin controls, and password-protected access.',
-      link: 'https://github.com/pollycarp/flask-file-share'
-    },
-    {
-      title: 'telco_churn_prediction',
-      description: 'A full-stack machine learning app using Flask, scikit-learn, and pandas. Supports real-time churn prediction, CSV upload, data visualization, and chart rendering via Chart.js.',
-      link: 'https://github.com/pollycarp/telco_churn_prediction'
-    }
-  ],
-  React: [
-    {
-      title: 'polycarp-dev-portfolio',
-      description: 'A fully animated, responsive personal portfolio built using React.js, Framer Motion, Flask, and Bootstrap, featuring interactive routing, GitHub project integration, and a custom contact form.',
-      link: 'https://github.com/pollycarp/polycarp-dev-portfolio'
-    }
-  ],
-  Python: [
-    {
-      title: 'console-grid-game',
-      description: 'A Python-based console game using object-oriented principles and grid logic, featuring obstacles, point collection, and player navigation via CLI.',
-      link: 'https://github.com/pollycarp/console-grid-game'
-    },
-    {
-      title: 'PrivacyLLM',
-      description: 'A Python research project exploring language model safety and prompt injection vulnerabilities using OpenAI’s GPT APIs and masking strategies.',
-      link: 'https://github.com/pollycarp/PrivacyLLM'
-    }
-  ],
-  Java: [
-    {
-      title: 'Airline-Ticket-Reservation-System-Design',
-      description: 'A core Java-based system for managing airline reservations, flight schedules, passenger records, and booking status with basic GUI support.',
-      link: 'https://github.com/pollycarp/Airline-Ticket-Reservation-System-Design'
-    }
-  ]
+// Resume content
+const contact = {
+  name: 'Polycarp Kingori',
+  email: 'markpollycarp@gmail.com',
+  phone: '+254794386844',
+  links: 'LinkedIn | GitHub | Portfolio',
+  title: 'AI/ML Engineer | Data Analyst | AI Automation Specialist',
+  tagline: 'Building Scalable Solutions for Finance and Tech',
 };
 
-// Component
+const summary =
+  'Results-driven AI and data professional with 7+ years of experience in machine learning, generative AI, workflow automation, and analytics. Skilled in Python, SQL, LLM applications, dashboards, and no-code/low-code tools to build practical solutions that improve business operations and decision-making. Strong at translating complex business needs into scalable AI-enabled products, data insights, and automated workflows across cross-functional teams.';
+
+const skills = [
+  'Python',
+  'SQL',
+  'JavaScript',
+  'Pandas',
+  'NumPy',
+  'Scikit-learn',
+  'PyTorch',
+  'TensorFlow',
+  'Machine Learning',
+  'Predictive Modeling',
+  'NLP',
+  'Generative AI',
+  'LLMs',
+  'Prompt Engineering',
+  'RAG',
+  'Vector Databases',
+  'AI Agents',
+  'Chatbots',
+  'MLOps',
+  'CI/CD for ML',
+  'APIs',
+  'Webhooks',
+  'Zapier',
+  'Make',
+  'n8n',
+  'Power BI',
+  'Metabase',
+  'ETL Pipelines',
+  'AWS',
+  'GCP',
+  'Azure',
+  'Data Governance',
+  'Healthcare Analytics',
+  'Fintech Analytics',
+  'ERP Integration',
+];
+
+const experience = [
+  {
+    title: 'ML & AI Engineer',
+    company: 'Independent Consultant | Remote',
+    date: 'Jan. 2026 – Present',
+    bullets: [
+      'Built scalable AI/ML and analytics solutions that convert raw data into actionable insights for decision-making.',
+      'Developed data pipelines, predictive models, and BI dashboards using Python, SQL, Power BI, AWS, and GCP.',
+      'Automated workflows and deployed cloud-based solutions that reduced manual effort by 40% and improved reporting speed by 60%.',
+    ],
+  },
+  {
+    title: 'Data Scientist',
+    company: 'UNDP Kenya | Hybrid',
+    date: 'Jan. 2024 – Dec. 2025',
+    bullets: [
+      'Developed ETL and ingestion pipelines for large datasets and supported model training, data analysis, and storytelling.',
+      'Used Python and SQL to improve data quality, analytics readiness, and reporting efficiency by 54%.',
+      'Delivered insights for technical and non-technical stakeholders across climate resilience initiatives.',
+    ],
+  },
+  {
+    title: 'Data Analyst (Operational Support)',
+    company: 'United Nations DT SACCO | Onsite',
+    date: 'Jun. 2023 – Dec. 2024',
+    bullets: [
+      'Improved data quality through verification, cleaning, record standardization, and spreadsheet automation.',
+      'Used Excel, Python, and Pandas to streamline workflows and reduce reporting errors by 30%.',
+      'Coordinated with departments to resolve incomplete records across datasets.',
+    ],
+  },
+  {
+    title: 'Machine Learning & AI Researcher',
+    company: 'B12K | Remote',
+    date: 'Jan. 2019 – Dec. 2022',
+    bullets: [
+      'Researched, designed, and benchmarked AI/ML architectures for intelligent systems and applied use cases.',
+      'Built RAG pipelines and evaluated models for performance, scalability, and production readiness.',
+      'Improved solution performance by 30% through experimentation, optimization, and architecture refinement.',
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: 'Bachelor of Science: Software Development',
+    school: 'Brigham Young University - Idaho',
+    date: 'Anticipated 2027',
+    details: ['Relevant Coursework: Data Structures, Systems Analysis, Database Design'],
+  },
+  {
+    degree: 'Bachelor of Science: Computer Science',
+    school: 'Maseno University',
+    date: 'Sept. 2018 – Dec. 2022',
+    details: ['Relevant Coursework: Data Structures, Systems Analysis, Database Design'],
+  },
+];
+
+const certificates = [
+  'Agentic AI with LangGraph, CrewAI, AutoGen and BeeAI - IBM',
+  'Agentic AI Training - UNDP ICPSD',
+];
+
+// Small reusable components
+const BulletList = ({ items }) => (
+  <View>
+    {items.map((item, index) => (
+      <View key={index} style={styles.bulletRow}>
+        <Text style={styles.bullet}>•</Text>
+        <Text style={styles.bulletText}>{item}</Text>
+      </View>
+    ))}
+  </View>
+);
+
 const PDFResume = () => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.name}>Polycarp Kingori</Text>
-        <Text style={styles.contact}>Full Stack Developer – Nairobi, Kenya</Text>
-        <Text style={styles.contact}>Email: markpollycarp@gmail.com | Phone: 0794 386 844</Text>
-        <Text style={styles.contact}>GitHub: github.com/pollycarp</Text>
+        <Text style={styles.name}>{contact.name}</Text>
+        <Text style={styles.contactLine}>
+          {contact.email} | {contact.links} | {contact.phone}
+        </Text>
+        <Text style={styles.roleTitle}>{contact.title}</Text>
+        <Text style={styles.tagline}>{contact.tagline}</Text>
       </View>
 
-      {/* Summary */}
+      {/* Professional Summary */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Professional Summary</Text>
-        <Text>
-          Motivated and detail-oriented full-stack developer with experience in building efficient, scalable web platforms, APIs, and automation pipelines. Skilled in modern frameworks and passionate about clean code.
-        </Text>
+        <Text style={styles.paragraph}>{summary}</Text>
       </View>
 
       {/* Skills */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Core Skills</Text>
-        <View>
-          {skills.map((skill, i) => (
-            <Text key={i} style={styles.bullet}>• {skill}</Text>
+        <Text style={styles.sectionTitle}>Skills</Text>
+        <View style={styles.skillsGrid}>
+          {skills.map((skill, index) => (
+            <Text key={index} style={styles.skillItem}>
+              • {skill}
+            </Text>
           ))}
         </View>
       </View>
 
-      {/* Timeline */}
+      {/* Experience */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Experience & Education</Text>
-        {timeline.map((item, i) => (
-          <View key={i} style={styles.listItem}>
-            <Text style={styles.subheading}>{item.title}</Text>
-            <Text>{item.subtitle} – {item.date}</Text>
-            <Text>{item.description}</Text>
+        <Text style={styles.sectionTitle}>Experience</Text>
+        {experience.map((job, index) => (
+          <View key={index} style={styles.entry}>
+            <View style={styles.entryHeader}>
+              <Text style={styles.entryTitle}>{job.title}</Text>
+              <Text style={styles.entryDate}>{job.date}</Text>
+            </View>
+            <Text style={styles.entrySubtitle}>{job.company}</Text>
+            <BulletList items={job.bullets} />
           </View>
         ))}
       </View>
 
-      {/* Projects */}
+      {/* Education */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Highlighted Projects</Text>
-        {Object.entries(projects).map(([stack, projList]) => (
-          <View key={stack} style={{ marginBottom: 10 }}>
-            <Text style={{ fontSize: 12, marginBottom: 4, color: '#00bfff' }}>{stack}</Text>
-            {projList.map((proj, i) => (
-              <View key={i} style={{ marginLeft: 8, marginBottom: 4 }}>
-                <Text style={{ fontWeight: 'bold' }}>{proj.title}</Text>
-                <Text>{proj.description}</Text>
-                <Link src={proj.link} style={{ color: '#00bfff', fontSize: 10 }}>{proj.link}</Link>
-              </View>
-            ))}
+        <Text style={styles.sectionTitle}>Education</Text>
+        {education.map((item, index) => (
+          <View key={index} style={styles.entry}>
+            <View style={styles.entryHeader}>
+              <Text style={styles.entryTitle}>{item.degree}</Text>
+              <Text style={styles.entryDate}>{item.date}</Text>
+            </View>
+            <Text style={styles.entrySubtitle}>{item.school}</Text>
+            <BulletList items={item.details} />
           </View>
+        ))}
+      </View>
+
+      {/* Certificates */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Certificates</Text>
+        {certificates.map((cert, index) => (
+          <Text key={index} style={styles.certItem}>
+            • {cert}
+          </Text>
         ))}
       </View>
     </Page>
