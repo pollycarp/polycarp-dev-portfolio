@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import profilePic from '../assets/profile.jpg';
+import { FaGithub } from 'react-icons/fa';
+import { useInView } from 'react-intersection-observer';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDFResume from '../components/PDFResume';
 import '../styles/About.css';
@@ -106,11 +108,51 @@ const certificates = [
   'Agentic AI Training - UNDP ICPSD'
 ];
 
-const cardStyle = {
-  backgroundColor: '#ffffff10',
-  borderLeft: '4px solid #00bfff',
-  padding: '1rem 1.5rem',
-  borderRadius: '6px'
+const projects = {
+  Flask: [
+    {
+      title: 'flask-file-share',
+      description:
+        'A secure file-sharing platform built using Flask, React, and Google Auth. Supports download tracking, admin controls, and password-protected access.',
+      link: 'https://github.com/pollycarp/flask-file-share'
+    },
+    {
+      title: 'telco_churn_prediction',
+      description:
+        'A full-stack machine learning app using Flask, scikit-learn, and pandas. Supports real-time churn prediction, CSV upload, data visualization, and chart rendering via Chart.js.',
+      link: 'https://github.com/pollycarp/telco_churn_prediction'
+    }
+  ],
+  React: [
+    {
+      title: 'polycarp-dev-portfolio',
+      description:
+        'A fully animated, responsive personal portfolio built using React.js, Framer Motion, Flask, and Bootstrap, featuring interactive routing, GitHub project integration, and a custom contact form.',
+      link: 'https://github.com/pollycarp/polycarp-dev-portfolio'
+    }
+  ],
+  Python: [
+    {
+      title: 'console-grid-game',
+      description:
+        'A Python-based console game using object-oriented principles and grid logic, featuring obstacles, point collection, and player navigation via CLI.',
+      link: 'https://github.com/pollycarp/console-grid-game'
+    },
+    {
+      title: 'PrivacyLLM',
+      description:
+        'A Python research project exploring language model safety and prompt injection vulnerabilities using OpenAI GPT APIs and masking strategies.',
+      link: 'https://github.com/pollycarp/PrivacyLLM'
+    }
+  ],
+  Java: [
+    {
+      title: 'Airline-Ticket-Reservation-System-Design',
+      description:
+        'A core Java-based system for managing airline reservations, flight schedules, passenger records, and booking status with basic GUI support.',
+      link: 'https://github.com/pollycarp/Airline-Ticket-Reservation-System-Design'
+    }
+  ]
 };
 
 const sectionWrapStyle = {
@@ -123,6 +165,66 @@ const sectionTitleStyle = {
   textAlign: 'center',
   color: '#00bfff',
   marginBottom: '1.5rem'
+};
+
+const cardStyle = {
+  backgroundColor: '#ffffff10',
+  borderLeft: '4px solid #00bfff',
+  padding: '1rem 1.5rem',
+  borderRadius: '6px'
+};
+
+const projectCardStyle = {
+  backgroundColor: '#ffffff10',
+  border: '1px solid #00bfff',
+  padding: '1rem 1.2rem',
+  borderRadius: '6px'
+};
+
+const ProjectCard = ({ proj, index }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2
+  });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: 50 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ delay: index * 0.1, duration: 0.6 }}
+      style={projectCardStyle}
+    >
+      <h5
+        style={{
+          marginBottom: '0.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem'
+        }}
+      >
+        <FaGithub style={{ color: '#00bfff' }} />
+        <a
+          href={proj.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: '#00bfff',
+            textDecoration: 'none',
+            fontWeight: 'bold',
+            fontSize: '1.05rem'
+          }}
+          onMouseOver={(e) => (e.target.style.textDecoration = 'underline')}
+          onMouseOut={(e) => (e.target.style.textDecoration = 'none')}
+        >
+          {proj.title}
+        </a>
+      </h5>
+      <p style={{ color: '#ccc', fontSize: '0.95rem', lineHeight: 1.6 }}>
+        {proj.description}
+      </p>
+    </motion.div>
+  );
 };
 
 const About = () => {
@@ -169,15 +271,12 @@ const About = () => {
           </p>
 
           <p className="about-summary">
-            Results-driven AI and data professional with 7+ years of experience in machine
-            learning, generative AI, workflow automation, and analytics. Skilled in Python,
-            SQL, LLM applications, dashboards, and no-code/low-code tools to build practical
-            solutions that improve business operations and decision-making. Strong at
-            translating complex business needs into scalable AI-enabled products, data
-            insights, and automated workflows across cross-functional teams.
+            Results-driven AI and data professional with experience in machine learning,
+            generative AI, workflow automation, and analytics. Skilled in Python, SQL,
+            LLM applications, dashboards, and no-code/low-code tools to build practical
+            solutions that improve business operations and decision-making.
           </p>
 
-          {/* Skills */}
           <div className="skills-section">
             <h4>Core Skills</h4>
             <div className="skills-wrapper">
@@ -264,6 +363,38 @@ const About = () => {
             ))}
           </ul>
         </motion.div>
+      </div>
+
+      {/* Projects */}
+      <div style={sectionWrapStyle}>
+        <h3 style={sectionTitleStyle}>Technical Projects</h3>
+
+        {Object.entries(projects).map(([stack, projList]) => (
+          <div key={stack} style={{ marginTop: '2.5rem' }}>
+            <h4
+              style={{
+                color: '#fff',
+                borderBottom: '1px solid #00bfff',
+                paddingBottom: '0.3rem'
+              }}
+            >
+              {stack}
+            </h4>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+                marginTop: '1rem'
+              }}
+            >
+              {projList.map((proj, i) => (
+                <ProjectCard key={proj.title} proj={proj} index={i} />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Resume Button */}
