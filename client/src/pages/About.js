@@ -143,6 +143,38 @@ const projects = {
       description:
         'A Python research project exploring language model safety and prompt injection vulnerabilities using OpenAI GPT APIs and masking strategies.',
       link: 'https://github.com/pollycarp/PrivacyLLM'
+    },
+    {
+      title: 'audio-genre-multilabel-classifier',
+      description:
+        'A PyTorch and Librosa project for multi-label audio genre classification from short WAV clips using spectral and temporal features.',
+      link: 'https://github.com/pollycarp/audio-genre-multilabel-classifier'
+    },
+    {
+      title: 'midi-next-sequence-classifier',
+      description:
+        'A PyTorch-based classifier for next-bar prediction in symbolic MIDI music using pitch histogram features.',
+      link: 'https://github.com/pollycarp/midi-next-sequence-classifier'
+    }
+  ],
+  'Deep Learning / Applied ML': [
+    {
+      title: 'composer-classification-lstm',
+      description:
+        'A MIDI-based composer classification model built with LSTM neural networks in PyTorch, trained on pitch sequences from symbolic music data.',
+      link: 'https://github.com/pollycarp/composer-classification-lstm'
+    },
+    {
+      title: 'Heart-disease-prediction',
+      description:
+        'A machine learning notebook that implements and compares Random Forest, Gradient Boosting, and Neural Networks for heart disease prediction.',
+      link: 'https://github.com/pollycarp/Heart-disease-prediction'
+    },
+    {
+      title: 'remote-sensing-sparse-segmentation',
+      description:
+        'A deep learning computer vision project for remote sensing image segmentation using a U-Net with ResNet-34 encoder under sparse supervision.',
+      link: 'https://github.com/pollycarp/remote-sensing-sparse-segmentation'
     }
   ],
   Java: [
